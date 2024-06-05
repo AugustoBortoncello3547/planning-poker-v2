@@ -12,7 +12,7 @@ function Header() {
     <Navbar bg="light" style={{ position: 'fixed', width: '100%', top: 0 }}>
       <Container>
         <Navbar.Brand as={Link} to="/">
-          <Image src="logo.png" fluid style={{ width: 240, height: 40 }} />
+          <Image src="../logo.png" fluid style={{ width: 240, height: 40 }} />
         </Navbar.Brand>
         <Nav className="me-auto">
           {/* <Nav.Link href="#features">Features</Nav.Link>

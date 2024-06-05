@@ -2,14 +2,22 @@ import React, { useEffect, useState } from 'react'
 import './Game.scss'
 
 import { Container } from 'react-bootstrap'
-
-import { IPlayer } from '../../types/Player'
+import { useNavigate, useParams } from 'react-router-dom'
+import { DataSnapshot } from 'firebase/database'
 
 import PlayerCard from './PlayerCard'
 import ModalPickUsername from '../../components/Modal/ModalPickUsername'
+
+import { IPlayer } from '../../types/Player'
+import { IGame } from '../../types/Game'
+
 import { checkHasUsername, getPlayer } from '../../helpers/user'
-import { useNavigate, useParams } from 'react-router-dom'
-import { addPlayerToGame, getGame } from '../../services/game'
+import {
+  addPlayerToGame,
+  getGame,
+  startListenGameChanges,
+} from '../../services/game'
+import { parseGamePlayers } from '../../helpers/game'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -29,6 +37,7 @@ export default function Game() {
       const game = await getGame(gameId)
       if (!game) return navigate('/')
       setIsLoadingGame(false)
+      startListenGameChanges(gameId, handleGameChanges)
 
       if (!checkHasUsername()) {
         setShouldPickUsername(true)
@@ -37,11 +46,20 @@ export default function Game() {
         const player = getPlayer()
         if (player) {
           addPlayerToGame(gameId, player)
-          setPlayers([player])
         }
       }
     } else navigate('/')
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+
+  function handleGameChanges(snapshot: DataSnapshot) {
+    const gameChanges: IGame = snapshot.val()
+    if (gameChanges) {
+      setPlayers([...parseGamePlayers(gameChanges)])
+    } else {
+      // Should return to home, game does not exist
+      navigate('/')
+    }
   }
 
   if (isLoadingGame)
