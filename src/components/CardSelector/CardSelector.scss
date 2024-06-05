@@ -1,0 +1,36 @@
+// Card Selector
+// ------------------------------------------
+$primary: var(--bs-primary); 
+
+.card-selector {
+    &-container {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        text-align: center;
+        padding-bottom: 0.5rem;
+    }
+
+    &-list {
+        list-style: none;
+
+        width: 100%;
+        max-width: 100%;
+        overflow: auto hidden;
+
+        white-space: nowrap;
+
+        &__card-container {
+            display: inline-block;
+            margin: 0 .8rem;
+            transition: all .1s linear;
+            vertical-align: top;
+            white-space: nowrap;
+
+            .card-container {
+                height: 4.5rem;
+                width: 3rem;
+            }
+        }
+    }
+}

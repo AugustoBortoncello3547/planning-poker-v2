@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DataSnapshot } from 'firebase/database'
 
-import PlayerCard from './PlayerCard'
+import PlayerCard from '../../components/PlayerCard'
 import ModalPickUsername from '../../components/Modal/ModalPickUsername'
 
 import { IPlayer } from '../../types/Player'
@@ -18,6 +18,7 @@ import {
   startListenGameChanges,
 } from '../../services/game'
 import { parseGamePlayers } from '../../helpers/game'
+import CardSelector from '../../components/CardSelector'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -44,9 +45,7 @@ export default function Game() {
         return
       } else {
         const player = getPlayer()
-        if (player) {
-          addPlayerToGame(gameId, player)
-        }
+        if (player) addPlayerToGame(gameId, player)
       }
     } else navigate('/')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +80,7 @@ export default function Game() {
     )
 
   return (
-    <Container className="d-flex flex-column align-items-center justify-content-center vh-100">
+    <Container className="d-flex flex-column align-items-center justify-content-center vh-100 p-relative">
       <Container className="table-container">
         <div />
         <div className="table-container__top">
@@ -106,6 +105,8 @@ export default function Game() {
         </div>
         <div />
       </Container>
+
+      <CardSelector />
     </Container>
   )
 }

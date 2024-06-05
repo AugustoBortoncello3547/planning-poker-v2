@@ -1,5 +1,8 @@
 import React from 'react'
+import './PlayerCard.scss'
+
 import { IPlayer } from '../../types/Player'
+import Card from '../Card'
 
 interface PlayerCardProps {
   player?: IPlayer
@@ -10,9 +13,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
 
   return (
     <div className="player-container">
-      <div className="player-container__card mb-1">
-        <h2 className="player-container__card__selected">4</h2>
-      </div>
+      <Card value="4" />
       <h6 className="player-container__name">{player.name}</h6>
     </div>
   )

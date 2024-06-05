@@ -1,0 +1,33 @@
+// Card Selector
+// ------------------------------------------
+$primary: var(--bs-primary); 
+
+
+.card-container {
+    // Default
+    border-radius: .6rem;
+    flex-shrink: 0;
+    height: 4rem;
+    width: 2.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.empty {
+        background-color: #e8e9ea;
+    }
+
+    &.selected {
+        background-color: $primary;
+    }
+
+    &.show {
+        background-color: #fff;
+        border: 2px solid $primary;
+    }
+
+    &__text {
+        margin: initial !important;
+    }
+}
