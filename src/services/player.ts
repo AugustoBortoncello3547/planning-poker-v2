@@ -16,3 +16,13 @@ export async function createPlayer(
   const player: IPlayer = { key: newPlayerKey || '', name }
   return player
 }
+
+export async function upsertPlayerVote(
+  gameKey: string,
+  player: IPlayer
+): Promise<void> {
+  await set(
+    ref(db, `${GAME_KEY}/${gameKey}/${PLAYER_KEY}/${player.key}`),
+    player
+  )
+}

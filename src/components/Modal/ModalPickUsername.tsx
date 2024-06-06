@@ -1,16 +1,25 @@
 import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
+
 import { createPlayer } from '../../services/player'
 import { setPlayer } from '../../helpers/user'
 import { addPlayerToGame } from '../../services/game'
+
+import { IPlayer } from '../../types/Player'
 
 interface ModalProps {
   gameKey: string
   show: boolean
   setShow: (value: boolean) => void
+  setCurrentPlayer?: (player: IPlayer) => void
 }
 
-function ModalPickUsername({ gameKey, show, setShow }: ModalProps) {
+function ModalPickUsername({
+  gameKey,
+  show,
+  setShow,
+  setCurrentPlayer,
+}: ModalProps) {
   const [name, setName] = useState('')
 
   async function handleSaveUsername() {
@@ -23,6 +32,7 @@ function ModalPickUsername({ gameKey, show, setShow }: ModalProps) {
     if (player) {
       setPlayer(player)
       await addPlayerToGame(gameKey, player)
+      if (setCurrentPlayer) setCurrentPlayer(player)
     }
 
     setShow(false)

@@ -16,7 +16,6 @@ $primary: var(--bs-primary);
 
         width: 100%;
         max-width: 100%;
-        overflow: auto hidden;
 
         white-space: nowrap;
 
@@ -30,6 +29,19 @@ $primary: var(--bs-primary);
             .card-container {
                 height: 4.5rem;
                 width: 3rem;
+                transition: margin .2s linear;
+
+                &.selected {
+                    margin-top: -.8rem;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &:not(.selected):hover {
+                    background-color: #f1f1f1;
+                }
             }
         }
     }

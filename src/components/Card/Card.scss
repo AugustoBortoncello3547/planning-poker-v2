@@ -20,6 +20,7 @@ $primary: var(--bs-primary);
 
     &.selected {
         background-color: $primary;
+        color: #fff;
     }
 
     &.show {

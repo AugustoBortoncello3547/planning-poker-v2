@@ -15,6 +15,7 @@ import { checkHasUsername, getPlayer } from '../../helpers/user'
 import {
   addPlayerToGame,
   getGame,
+  removePlayerFromGame,
   startListenGameChanges,
 } from '../../services/game'
 import { parseGamePlayers } from '../../helpers/game'
@@ -26,8 +27,12 @@ export default function Game() {
   const [isLoadingGame, setIsLoadingGame] = useState(true)
   const [shouldPickUsername, setShouldPickUsername] = useState(false)
 
+  const [currentPlayer, setCurrentPlayer] = useState<IPlayer | null>(null)
+  const [currentGame, setCurrentGame] = useState<IGame | null>(null)
   const [players, setPlayers] = useState<IPlayer[]>([])
 
+  // Handle game changes
+  // ------------------------------------------
   useEffect(() => {
     handleGame()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,7 +50,10 @@ export default function Game() {
         return
       } else {
         const player = getPlayer()
-        if (player) addPlayerToGame(gameId, player)
+        if (player) {
+          addPlayerToGame(gameId, player)
+          setCurrentPlayer(player)
+        }
       }
     } else navigate('/')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,11 +62,28 @@ export default function Game() {
   function handleGameChanges(snapshot: DataSnapshot) {
     const gameChanges: IGame = snapshot.val()
     if (gameChanges) {
+      setCurrentGame(gameChanges)
+      console.log(gameChanges)
       setPlayers([...parseGamePlayers(gameChanges)])
     } else {
       // Should return to home, game does not exist
       navigate('/')
     }
+  }
+
+  // Handle player leave page
+  // ------------------------------------------
+  useEffect(() => {
+    window.addEventListener('beforeunload', handlePlayerLeaveGame)
+
+    return () =>
+      window.removeEventListener('beforeunload', handlePlayerLeaveGame)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlayer])
+
+  async function handlePlayerLeaveGame() {
+    if (gameId && currentPlayer)
+      await removePlayerFromGame(gameId, currentPlayer)
   }
 
   if (isLoadingGame)
@@ -76,6 +101,7 @@ export default function Game() {
         gameKey={gameId || ''}
         show={shouldPickUsername}
         setShow={setShouldPickUsername}
+        setCurrentPlayer={setCurrentPlayer}
       />
     )
 
@@ -84,29 +110,29 @@ export default function Game() {
       <Container className="table-container">
         <div />
         <div className="table-container__top">
-          <PlayerCard player={players?.[1]} />
-          <PlayerCard player={players?.[3]} />
-          <PlayerCard player={players?.[5]} />
+          <PlayerCard game={currentGame} player={players?.[1]} />
+          <PlayerCard game={currentGame} player={players?.[3]} />
+          <PlayerCard game={currentGame} player={players?.[5]} />
         </div>
         <div />
         <div className="table-container__left">
-          <PlayerCard player={players?.[6]} />
+          <PlayerCard game={currentGame} player={players?.[6]} />
         </div>
         <div className="table-container__table">Escolha sua carta</div>
         <div className="table-container__right">
-          <PlayerCard player={players?.[7]} />
+          <PlayerCard game={currentGame} player={players?.[7]} />
         </div>
         <div />
 
         <div className="table-container__bottom">
-          <PlayerCard player={players?.[0]} />
-          <PlayerCard player={players?.[2]} />
-          <PlayerCard player={players?.[4]} />
+          <PlayerCard game={currentGame} player={players?.[0]} />
+          <PlayerCard game={currentGame} player={players?.[2]} />
+          <PlayerCard game={currentGame} player={players?.[4]} />
         </div>
         <div />
       </Container>
 
-      <CardSelector />
+      <CardSelector game={currentGame} player={currentPlayer} />
     </Container>
   )
 }
