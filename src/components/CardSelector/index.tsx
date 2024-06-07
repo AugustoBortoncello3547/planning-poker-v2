@@ -12,15 +12,21 @@ import { IPlayer } from '../../types/Player'
 interface CardSelectorProps {
   game: IGame | null
   player: IPlayer | null
+  setPlayer: (player: IPlayer) => void
 }
 
-export default function CardSelector({ game, player }: CardSelectorProps) {
+export default function CardSelector({
+  game,
+  player,
+  setPlayer,
+}: CardSelectorProps) {
   const voteOptions = FIBONACCI_VOTING_SYSTEM
 
   async function handleSelectCard(value: string) {
     if (value && game?.key && player?.key) {
       if (player?.selectedCard === value) player.selectedCard = ''
       else player.selectedCard = value
+      setPlayer(player)
       await upsertPlayerVote(game?.key, player)
     }
   }

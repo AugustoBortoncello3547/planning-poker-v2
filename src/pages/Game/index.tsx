@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Game.scss'
 
-import { Container } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DataSnapshot } from 'firebase/database'
 
@@ -17,9 +17,11 @@ import {
   getGame,
   removePlayerFromGame,
   startListenGameChanges,
+  updateGameStatus,
 } from '../../services/game'
 import { parseGamePlayers } from '../../helpers/game'
 import CardSelector from '../../components/CardSelector'
+import { GameStatusEnum } from '../../enums/GameStatus'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -86,6 +88,14 @@ export default function Game() {
       await removePlayerFromGame(gameId, currentPlayer)
   }
 
+  // Reveal all player cards
+  // ------------------------------------------
+  async function handleRevealCardsClick() {
+    if (gameId) await updateGameStatus(gameId, GameStatusEnum.SHOW)
+  }
+
+  // Render
+  // ------------------------------------------
   if (isLoadingGame)
     return (
       <span
@@ -118,7 +128,19 @@ export default function Game() {
         <div className="table-container__left">
           <PlayerCard game={currentGame} player={players?.[6]} />
         </div>
-        <div className="table-container__table">Escolha sua carta</div>
+        <div className="table-container__table">
+          {currentGame?.status === GameStatusEnum.IDLE ? (
+            currentPlayer?.selectedCard ? (
+              <Button onClick={handleRevealCardsClick}>Revelar cartas</Button>
+            ) : (
+              'Escolha sua carta'
+            )
+          ) : (
+            <div>
+              <Button onClick={() => {}}>Iniciar nova votação</Button>
+            </div>
+          )}
+        </div>
         <div className="table-container__right">
           <PlayerCard game={currentGame} player={players?.[7]} />
         </div>
@@ -132,7 +154,11 @@ export default function Game() {
         <div />
       </Container>
 
-      <CardSelector game={currentGame} player={currentPlayer} />
+      <CardSelector
+        game={currentGame}
+        player={currentPlayer}
+        setPlayer={setCurrentPlayer}
+      />
     </Container>
   )
 }

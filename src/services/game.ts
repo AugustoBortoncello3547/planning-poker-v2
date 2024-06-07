@@ -9,6 +9,7 @@ import {
   onValue,
   DataSnapshot,
   remove,
+  update,
 } from 'firebase/database'
 import { IGame } from '../types/Game'
 import { IPlayer } from '../types/Player'
@@ -32,6 +33,10 @@ export async function createGame(name: string): Promise<string | null> {
   await set(ref(db, `${GAME_KEY}/${newGameKey}`), data)
 
   return newGameKey
+}
+
+export async function updateGameStatus(gameId: string, status: GameStatusEnum) {
+  await update(ref(db, `${GAME_KEY}/${gameId}`), { status })
 }
 
 export async function addPlayerToGame(gameId: string, player: IPlayer) {
