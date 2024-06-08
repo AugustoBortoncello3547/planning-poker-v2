@@ -24,7 +24,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': 0,
     'no-empty': 'warn',
     'react/prop-types': ['off'],
     'no-unused-vars': 'off',
