@@ -11,7 +11,7 @@ import ModalPickUsername from '../../components/Modal/ModalPickUsername'
 import { IPlayer } from '../../types/Player'
 import { IGame } from '../../types/Game'
 
-import { checkHasUsername, getPlayer, setPlayer } from '../../helpers/user'
+import { checkHasUsername, getPlayer } from '../../helpers/user'
 import {
   addPlayerToGame,
   getGame,
