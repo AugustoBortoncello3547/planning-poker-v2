@@ -11,7 +11,7 @@ import ModalPickUsername from '../../components/Modal/ModalPickUsername'
 import { IPlayer } from '../../types/Player'
 import { IGame } from '../../types/Game'
 
-import { checkHasUsername, getPlayer } from '../../helpers/user'
+import { checkHasUsername, getPlayer, setPlayer } from '../../helpers/user'
 import {
   addPlayerToGame,
   getGame,
@@ -23,6 +23,7 @@ import { parseGamePlayers } from '../../helpers/game'
 import CardSelector from '../../components/CardSelector'
 import { GameStatusEnum } from '../../enums/GameStatus'
 import Timer from '../../components/Timer'
+import { upsertPlayerVote } from '../../services/player'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -66,12 +67,34 @@ export default function Game() {
     const gameChanges: IGame = snapshot.val()
     if (gameChanges) {
       setCurrentGame(gameChanges)
-      console.log(gameChanges)
       setPlayers([...parseGamePlayers(gameChanges)])
     } else {
       // Should return to home, game does not exist
       navigate('/')
     }
+  }
+
+  const handleIniciarNovaVotacao = () => {
+    handleSatarNewVoting().then(async () => {
+      if (gameId && currentGame) {
+        const game = await getGame(gameId)
+        if (game) {
+          const idsPlayers = Object.keys(game.players)
+          if (idsPlayers.length > 0) {
+            idsPlayers.map(async (idPlayer) => {
+              const player: IPlayer = game.players[idPlayer]
+              player.selectedCard = ''
+
+              await upsertPlayerVote(currentGame.key, player)
+            })
+          }
+
+          if (currentPlayer) {
+            setCurrentPlayer(game.players[currentPlayer.key])
+          }
+        }
+      }
+    })
   }
 
   // Handle player leave page
@@ -87,6 +110,12 @@ export default function Game() {
   async function handlePlayerLeaveGame() {
     if (gameId && currentPlayer)
       await removePlayerFromGame(gameId, currentPlayer)
+  }
+
+  // Start new voting
+  // ------------------------------------------
+  async function handleSatarNewVoting() {
+    if (gameId) await updateGameStatus(gameId, GameStatusEnum.IDLE)
   }
 
   // Init counter
@@ -149,13 +178,13 @@ export default function Game() {
           )}
           {currentGame?.status === GameStatusEnum.SHOWED && (
             <div>
-              <Button onClick={() => {}}>Iniciar nova votação</Button>
+              <Button onClick={handleIniciarNovaVotacao}>
+                Iniciar nova votação
+              </Button>
             </div>
           )}
           {currentGame?.status === GameStatusEnum.SHOW && (
-            <Timer
-              handleFinishCouterRevealCards={handleFinishCouterRevealCards}
-            />
+            <Timer onFinishTimer={handleFinishCouterRevealCards} />
           )}
         </div>
         <div className="table-container__right">

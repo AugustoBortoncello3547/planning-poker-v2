@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 type TPropsTimer = {
-  handleFinishCouterRevealCards: () => void
+  onFinishTimer: () => void
 }
 
-export default function Timer({ handleFinishCouterRevealCards }: TPropsTimer) {
+export default function Timer({ onFinishTimer }: TPropsTimer) {
   const [count, setCount] = useState(3)
 
   useEffect(() => {
@@ -18,9 +18,9 @@ export default function Timer({ handleFinishCouterRevealCards }: TPropsTimer) {
     }
 
     if (count == 0) {
-      handleFinishCouterRevealCards()
+      onFinishTimer()
     }
-  }, [count])
+  }, [count, onFinishTimer])
 
   return (
     <>
