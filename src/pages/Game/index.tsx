@@ -66,6 +66,10 @@ export default function Game() {
   function handleGameChanges(snapshot: DataSnapshot) {
     const gameChanges: IGame = snapshot.val()
     if (gameChanges) {
+      const player = getPlayer()
+      if (player) {
+        setCurrentPlayer(gameChanges.players[player.key])
+      }
       setCurrentGame(gameChanges)
       setPlayers([...parseGamePlayers(gameChanges)])
     } else {
@@ -74,7 +78,7 @@ export default function Game() {
     }
   }
 
-  const handleIniciarNovaVotacao = () => {
+  const handleStartNewVoting = () => {
     handleSatarNewVoting().then(async () => {
       if (gameId && currentGame) {
         const game = await getGame(gameId)
@@ -87,10 +91,6 @@ export default function Game() {
 
               await upsertPlayerVote(currentGame.key, player)
             })
-          }
-
-          if (currentPlayer) {
-            setCurrentPlayer(game.players[currentPlayer.key])
           }
         }
       }
@@ -178,7 +178,7 @@ export default function Game() {
           )}
           {currentGame?.status === GameStatusEnum.SHOWED && (
             <div>
-              <Button onClick={handleIniciarNovaVotacao}>
+              <Button onClick={handleStartNewVoting}>
                 Iniciar nova votação
               </Button>
             </div>
