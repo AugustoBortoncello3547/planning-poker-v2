@@ -19,12 +19,16 @@ export default function PlayerCard({ game, player }: PlayerCardProps) {
   return (
     <div className="player-container">
       <Card
-        value={game.status === GameStatusEnum.SHOW ? player?.selectedCard : ''}
+        value={
+          game.status === GameStatusEnum.SHOWED ? player?.selectedCard : ''
+        }
         variant={
           game?.status === GameStatusEnum.IDLE
             ? player?.selectedCard
               ? CardVariant.SELECTED
               : CardVariant.EMPTY
+            : game?.status === GameStatusEnum.SHOW
+            ? CardVariant.SELECTED
             : CardVariant.SHOW
         }
       />

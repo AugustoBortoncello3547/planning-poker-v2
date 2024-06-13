@@ -8,6 +8,7 @@ import { upsertPlayerVote } from '../../services/player'
 import { CardVariant } from '../../enums/CardVariant'
 import { IGame } from '../../types/Game'
 import { IPlayer } from '../../types/Player'
+import { GameStatusEnum } from '../../enums/GameStatus'
 
 interface CardSelectorProps {
   game: IGame | null
@@ -31,6 +32,10 @@ export default function CardSelector({
     }
   }
 
+  const disabled = [GameStatusEnum.SHOWED, GameStatusEnum.SHOW].includes(
+    game?.status || GameStatusEnum.IDLE
+  )
+
   return (
     <div className="card-selector-container">
       <ul className="card-selector-list">
@@ -44,6 +49,7 @@ export default function CardSelector({
                   : CardVariant.SHOW
               }
               onClick={handleSelectCard}
+              disabled={disabled}
             />
           </li>
         ))}

@@ -22,6 +22,7 @@ import {
 import { parseGamePlayers } from '../../helpers/game'
 import CardSelector from '../../components/CardSelector'
 import { GameStatusEnum } from '../../enums/GameStatus'
+import Timer from '../../components/Timer'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -88,10 +89,16 @@ export default function Game() {
       await removePlayerFromGame(gameId, currentPlayer)
   }
 
+  // Init counter
+  // ------------------------------------------
+  async function handleInitCounterRevealCardsClick() {
+    if (gameId) await updateGameStatus(gameId, GameStatusEnum.SHOW)
+  }
+
   // Reveal all player cards
   // ------------------------------------------
-  async function handleRevealCardsClick() {
-    if (gameId) await updateGameStatus(gameId, GameStatusEnum.SHOW)
+  async function handleFinishCouterRevealCards() {
+    if (gameId) await updateGameStatus(gameId, GameStatusEnum.SHOWED)
   }
 
   // Render
@@ -131,14 +138,24 @@ export default function Game() {
         <div className="table-container__table">
           {currentGame?.status === GameStatusEnum.IDLE ? (
             currentPlayer?.selectedCard ? (
-              <Button onClick={handleRevealCardsClick}>Revelar cartas</Button>
+              <Button onClick={handleInitCounterRevealCardsClick}>
+                Revelar cartas
+              </Button>
             ) : (
               'Escolha sua carta'
             )
           ) : (
+            <></>
+          )}
+          {currentGame?.status === GameStatusEnum.SHOWED && (
             <div>
               <Button onClick={() => {}}>Iniciar nova votação</Button>
             </div>
+          )}
+          {currentGame?.status === GameStatusEnum.SHOW && (
+            <Timer
+              handleFinishCouterRevealCards={handleFinishCouterRevealCards}
+            />
           )}
         </div>
         <div className="table-container__right">
