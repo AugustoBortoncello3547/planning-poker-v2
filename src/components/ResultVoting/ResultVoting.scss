@@ -1,0 +1,27 @@
+.space-result-voting {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    display: flex;
+    margin-bottom: 2%;
+
+    .space-cards {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 50%;
+
+        .card-result-list {
+            list-style: none;
+            white-space: nowrap;
+        }
+    }
+
+    .average {
+        display: flex;
+        align-items: center;
+        width: 50%;
+    }
+}

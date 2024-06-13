@@ -24,6 +24,7 @@ import CardSelector from '../../components/CardSelector'
 import { GameStatusEnum } from '../../enums/GameStatus'
 import Timer from '../../components/Timer'
 import { upsertPlayerVote } from '../../services/player'
+import ResultVoting from '../../components/ResultVoting'
 
 export default function Game() {
   const { gameId } = useParams()
@@ -152,59 +153,65 @@ export default function Game() {
     )
 
   return (
-    <Container className="d-flex flex-column align-items-center justify-content-center vh-100 p-relative">
-      <Container className="table-container">
-        <div />
-        <div className="table-container__top">
-          <PlayerCard game={currentGame} player={players?.[1]} />
-          <PlayerCard game={currentGame} player={players?.[3]} />
-          <PlayerCard game={currentGame} player={players?.[5]} />
-        </div>
-        <div />
-        <div className="table-container__left">
-          <PlayerCard game={currentGame} player={players?.[6]} />
-        </div>
-        <div className="table-container__table">
-          {currentGame?.status === GameStatusEnum.IDLE ? (
-            currentPlayer?.selectedCard ? (
-              <Button onClick={handleInitCounterRevealCardsClick}>
-                Revelar cartas
-              </Button>
+    <>
+      <Container className="d-flex flex-column align-items-center justify-content-center vh-100 p-relative">
+        <Container className="table-container">
+          <div />
+          <div className="table-container__top">
+            <PlayerCard game={currentGame} player={players?.[1]} />
+            <PlayerCard game={currentGame} player={players?.[3]} />
+            <PlayerCard game={currentGame} player={players?.[5]} />
+          </div>
+          <div />
+          <div className="table-container__left">
+            <PlayerCard game={currentGame} player={players?.[6]} />
+          </div>
+          <div className="table-container__table">
+            {currentGame?.status === GameStatusEnum.IDLE ? (
+              currentPlayer?.selectedCard ? (
+                <Button onClick={handleInitCounterRevealCardsClick}>
+                  Revelar cartas
+                </Button>
+              ) : (
+                'Escolha sua carta'
+              )
             ) : (
-              'Escolha sua carta'
-            )
-          ) : (
-            <></>
-          )}
-          {currentGame?.status === GameStatusEnum.SHOWED && (
-            <div>
-              <Button onClick={handleStartNewVoting}>
-                Iniciar nova votação
-              </Button>
-            </div>
-          )}
-          {currentGame?.status === GameStatusEnum.SHOW && (
-            <Timer onFinishTimer={handleFinishCouterRevealCards} />
-          )}
-        </div>
-        <div className="table-container__right">
-          <PlayerCard game={currentGame} player={players?.[7]} />
-        </div>
-        <div />
+              <></>
+            )}
+            {currentGame?.status === GameStatusEnum.SHOWED && (
+              <div>
+                <Button onClick={handleStartNewVoting}>
+                  Iniciar nova votação
+                </Button>
+              </div>
+            )}
+            {currentGame?.status === GameStatusEnum.SHOW && (
+              <Timer onFinishTimer={handleFinishCouterRevealCards} />
+            )}
+          </div>
+          <div className="table-container__right">
+            <PlayerCard game={currentGame} player={players?.[7]} />
+          </div>
+          <div />
 
-        <div className="table-container__bottom">
-          <PlayerCard game={currentGame} player={players?.[0]} />
-          <PlayerCard game={currentGame} player={players?.[2]} />
-          <PlayerCard game={currentGame} player={players?.[4]} />
-        </div>
-        <div />
+          <div className="table-container__bottom">
+            <PlayerCard game={currentGame} player={players?.[0]} />
+            <PlayerCard game={currentGame} player={players?.[2]} />
+            <PlayerCard game={currentGame} player={players?.[4]} />
+          </div>
+          <div />
+        </Container>
+
+        {currentGame?.status === GameStatusEnum.SHOWED ? (
+          <ResultVoting game={currentGame} />
+        ) : (
+          <CardSelector
+            game={currentGame}
+            player={currentPlayer}
+            setPlayer={setCurrentPlayer}
+          />
+        )}
       </Container>
-
-      <CardSelector
-        game={currentGame}
-        player={currentPlayer}
-        setPlayer={setCurrentPlayer}
-      />
-    </Container>
+    </>
   )
 }
