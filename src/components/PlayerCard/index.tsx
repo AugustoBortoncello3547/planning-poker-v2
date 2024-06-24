@@ -28,8 +28,8 @@ export default function PlayerCard({ game, player }: PlayerCardProps) {
               ? CardVariant.SELECTED
               : CardVariant.EMPTY
             : game?.status === GameStatusEnum.SHOW
-            ? CardVariant.SELECTED
-            : CardVariant.SHOW
+            ? (player.selectedCard !== "" ? CardVariant.SELECTED : CardVariant.EMPTY)
+            : (player.selectedCard !== "" ? CardVariant.SHOW : CardVariant.EMPTY)
         }
       />
       <h6 className="player-container__name">{player.name}</h6>

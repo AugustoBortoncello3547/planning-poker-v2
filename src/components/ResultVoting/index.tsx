@@ -16,7 +16,6 @@ function ResultVoting({ game }: TPropsResultVoting) {
   let total = 0
   const result: TResultVotingItem[] = []
 
-  // Função auxiliar para encontrar ou criar um item no array de resultados
   const incrementCardCount = (card: string) => {
     const item = result.find((item) => item.card === card)
     if (item) {
@@ -41,6 +40,15 @@ function ResultVoting({ game }: TPropsResultVoting) {
     incrementCardCount(card)
   })
 
+  const totalCartasValidas = Object.values(game.players).filter((player) => {
+    if (!player.selectedCard){
+      return false;
+    }
+
+    return !isNaN(Number(player.selectedCard));
+  })
+
+  const media = total / totalCartasValidas?.length;
   return (
     <div className="space-result-voting">
       <div className="space-cards">
@@ -48,13 +56,13 @@ function ResultVoting({ game }: TPropsResultVoting) {
           {result.map((item) => (
             <li className="card-selector-list__card-container" key={item.card}>
               <Card value={item.card}></Card>
-              Count: {item.count}
+              {item.count} {item.count == 1 ? "Voto" : "Votos"}
             </li>
           ))}
         </ul>
       </div>
       <div className="average">
-        Average: {total / Object.values(game.players).length}
+        Média: {isNaN(media) ? 0 : media} 
       </div>
     </div>
   )

@@ -6,6 +6,7 @@
     padding-bottom: 0.5rem;
     display: flex;
     margin-bottom: 2%;
+    gap: 50px;
 
     .space-cards {
         display: flex;
@@ -16,6 +17,10 @@
         .card-result-list {
             list-style: none;
             white-space: nowrap;
+        }
+
+        .card-result-list .card-container {
+            pointer-events: none;
         }
     }
 
