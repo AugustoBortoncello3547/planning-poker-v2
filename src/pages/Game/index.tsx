@@ -68,7 +68,7 @@ export default function Game() {
     const gameChanges: IGame = snapshot.val()
     if (gameChanges) {
       const player = getPlayer()
-      if (player) {
+      if (player && gameChanges.players) {
         setCurrentPlayer(gameChanges.players[player.key])
       }
       setCurrentGame(gameChanges)
@@ -208,7 +208,7 @@ export default function Game() {
           <CardSelector
             game={currentGame}
             player={currentPlayer}
-            setPlayer={setCurrentPlayer}
+            setCurrentPlayer={setCurrentPlayer}
           />
         )}
       </Container>

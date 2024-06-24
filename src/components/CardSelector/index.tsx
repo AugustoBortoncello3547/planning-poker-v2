@@ -9,17 +9,18 @@ import { CardVariant } from '../../enums/CardVariant'
 import { IGame } from '../../types/Game'
 import { IPlayer } from '../../types/Player'
 import { GameStatusEnum } from '../../enums/GameStatus'
+import { setPlayer } from '../../helpers/user'
 
 interface CardSelectorProps {
   game: IGame | null
   player: IPlayer | null
-  setPlayer: (player: IPlayer) => void
+  setCurrentPlayer: (player: IPlayer) => void
 }
 
 export default function CardSelector({
   game,
   player,
-  setPlayer,
+  setCurrentPlayer,
 }: CardSelectorProps) {
   const voteOptions = FIBONACCI_VOTING_SYSTEM
 
@@ -28,6 +29,7 @@ export default function CardSelector({
       if (player?.selectedCard === value) player.selectedCard = ''
       else player.selectedCard = value
       setPlayer(player)
+      setCurrentPlayer(player)
       await upsertPlayerVote(game?.key, player)
     }
   }
