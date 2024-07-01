@@ -1,8 +1,6 @@
 import React from 'react'
 import './PlayerCard.scss'
-
 import Card from '../Card'
-
 import { IPlayer } from '../../types/Player'
 import { IGame } from '../../types/Game'
 import { GameStatusEnum } from '../../enums/GameStatus'

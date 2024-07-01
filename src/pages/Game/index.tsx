@@ -11,7 +11,7 @@ import ModalPickUsername from '../../components/Modal/ModalPickUsername'
 import { IPlayer } from '../../types/Player'
 import { IGame } from '../../types/Game'
 
-import { checkHasUsername, getPlayer } from '../../helpers/user'
+import { checkHasUsername, getPlayer, setPlayer } from '../../helpers/user'
 import {
   addPlayerToGame,
   getGame,
@@ -91,6 +91,7 @@ export default function Game() {
               player.selectedCard = ''
 
               await upsertPlayerVote(currentGame.key, player)
+              await setPlayer(player)
             })
           }
         }
