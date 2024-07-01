@@ -54,9 +54,9 @@ function ResultVoting({ game }: TPropsResultVoting) {
       <div className="space-cards">
         <ul className="card-result-list">
           {result.map((item) => (
-            <li className="card-result-item" key={item.card}>
-              <Card value={item.card} />
-              <span className="vote-count">{item.count} {item.count === 1 ? "Voto" : "Votos"}</span>
+            <li className="card-selector-list__card-container" key={item.card}>
+            <Card value={item.card}></Card>
+            {item.count} {item.count == 1 ? "Voto" : "Votos"}
             </li>
           ))}
         </ul>
