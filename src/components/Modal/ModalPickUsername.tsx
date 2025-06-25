@@ -44,7 +44,6 @@ function ModalPickUsername({
       return
     }
 
-    console.log(game)
     const senhaCorreta = await compare(senha, game.hashSenha)
     if (!senhaCorreta) {
       alert('Senha informada não é a correta')

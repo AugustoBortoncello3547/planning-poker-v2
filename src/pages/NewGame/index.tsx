@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Container, Form, InputGroup } from 'react-bootstrap'
+import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { createGame } from '../../services/game'
 import InputSenha from '../../components/InputPassword'
