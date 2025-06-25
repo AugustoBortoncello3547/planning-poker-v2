@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Button, Container, Form } from 'react-bootstrap'
+import { Button, Container, Form, InputGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { createGame } from '../../services/game'
+import InputSenha from '../../components/InputPassword'
 
 export default function NewGame() {
   const [isLoading, setIsLoading] = useState(false)
-  const [name, setName] = useState('')
+  const [name, setName] = useState<string>('')
+  const [senha, setSenha] = useState<string>('')
 
   const navigate = useNavigate()
 
@@ -15,15 +17,24 @@ export default function NewGame() {
       return
     }
 
+    if (!senha) {
+      alert('Preencha a senha')
+      return
+    }
+
     if (isLoading) return
     setIsLoading(true)
 
-    const gameKey = await createGame(name)
+    const gameKey = await createGame(name, senha)
     navigate(`/jogo/${gameKey}`)
   }
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     setName(e.target.value)
+  }
+
+  function handleSenhaChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSenha(e.target.value)
   }
 
   return (
@@ -37,7 +48,7 @@ export default function NewGame() {
               placeholder="UCS"
               onChange={handleNameChange}
             />
-
+            <InputSenha handleSenhaChange={handleSenhaChange} />
             <Button
               className="mt-3 w-100"
               onClick={handleCreateGame}

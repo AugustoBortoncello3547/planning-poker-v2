@@ -1,5 +1,4 @@
 import { GAME_KEY, PLAYER_KEY, db } from '../providers/firebase'
-
 import {
   ref,
   push,
@@ -14,19 +13,25 @@ import {
 import { IGame } from '../types/Game'
 import { IPlayer } from '../types/Player'
 import { GameStatusEnum } from '../enums/GameStatus'
+import { hash } from 'bcryptjs'
 
 export async function getGame(gameId: string): Promise<IGame | null> {
   const game = await get(ref(db, `${GAME_KEY}/${gameId}`))
   return game?.val()
 }
 
-export async function createGame(name: string): Promise<string | null> {
+export async function createGame(
+  name: string,
+  senha: string
+): Promise<string | null> {
   const newGameKey = push(child(ref(db), GAME_KEY)).key
   if (!newGameKey) return null
 
+  const hashSenha = await hash(senha, 10)
   const data: IGame = {
     key: newGameKey,
     name,
+    hashSenha: hashSenha,
     status: GameStatusEnum.IDLE,
     players: {},
   }
